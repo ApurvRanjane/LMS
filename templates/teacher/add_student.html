@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image:url("https://smartcampuses.com/wp-content/uploads/revslider/web-agency-home-content/Slide-2-Background.jpg");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            color: #000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .btn-primary {
+            background-color: #6a11cb;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #2575fc;
+        }
+    </style>
+</head>
+<body>
+{% block start %}
+ <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">LMS Portal</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="/admin_dash/">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">User Management</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Settings</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/userlogout/">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-5 d-flex justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg p-4">
+                <h2 class="text-center mb-4">Student Registration Form</h2>
+                <form method="POST" enctype="multipart/form-data">
+    {%csrf_token%}
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" name="name" placeholder="Enter your full name" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" name="email" placeholder="Enter your email" required>
+                    </div>
+                     
+                    <div class="mb-3">
+                        <label for="PRN" class="form-label">PRN Number</label>
+                        <input type="text" class="form-control" name="PRN" placeholder="Enter your PRN Number" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone Number</label>
+                        <input type="number" class="form-control" name="phone" placeholder="Enter your phone number" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="dob" class="form-label">Date of Birth</label>
+                        <input type="date" class="form-control" name="dob" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label">Image</label>
+                         <input type="file" class="form-control" name="image" id="exampleFormControlInput1" accept="image/jpeg" >
+                    </div>
+                    <div class="mb-3">
+                        <label for="branch" class="form-label">Branch</label>
+                        {% for b in branch %}
+                        <input type="text" class="form-control" name="branch" value="{{ b.branch }}" required readonly>
+                    {% endfor %}
+                    </div>
+                                            
+
+                    <div class="mb-3">
+                        <label for="course" class="form-label">Year</label>
+                        <select class="form-select" name="year"  id="year" required>
+                            <option selected disabled>Choose your Year</option>
+                            <option value="1">First Year</option>
+                            <option value="2">Second Year</option>
+                            <option value="3">Third Year</option>
+                            <option value="4">Bachelor Of Engineering</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Semester" class="form-label">Semester</label>
+                        <select class="form-select" name="semester" id="Semester" required>
+                            <option value="">Select Semester</option>
+                        </select>
+                    </div>
+                    
+        <div class="col-md-6 mb-3">
+          <label for="division" class="form-label">Division <small class="text-muted">(Type in capital)</small></label>
+          <input type="text" class="form-control" name="division" placeholder="e.g A,B.." style="text-transform: uppercase;" required>
+        </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address</label>
+                        <textarea class="form-control" name="address" rows="3" placeholder="Enter your address" required></textarea>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary w-100">Register</button>
+                    </div>
+                    <div class="form-input">
+                   <label class="text-danger">{{message}}</label>
+               </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+<script>
+const semesterMap = {
+  1: ['1', '2'],
+  2: ['3', '4'],
+  3: ['5', '6'],
+  4: ['7', '8']
+};
+
+
+document.getElementById("year").addEventListener("change", function () {
+
+
+  const year = this.value;
+  const semSelect = document.getElementById("Semester");
+  semSelect.innerHTML = `<option value="">Select Semester</option>`;
+  semesterMap[year]?.forEach(s => {
+    semSelect.innerHTML += `<option value="${s}">${s}</option>`;
+  });
+});
+</script>
+</html>
+

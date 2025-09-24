@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Notes Portal</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url("https://smartcampuses.com/wp-content/uploads/revslider/web-agency-home-content/Slide-2-Background.jpg");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding-top: 90px;
+        }
+
+        .content-section {
+            background-color: #e6f0ff;
+            margin: 0 auto;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 95%;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        h3.hny-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .text-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .filters-section {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .table {
+            border: 2px solid black;
+        }
+
+        .table th,
+        .table td {
+            border: 1px solid black !important;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .table thead th {
+            background-color: #343a40;
+            color: white;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .nav-link {
+            font-weight: bold !important;
+        }
+
+        .note-link {
+            color: blue;
+            text-decoration: underline;
+            font-weight: 500;
+        }
+
+        .note-link:hover {
+            text-decoration: none;
+        }
+
+        .alert-access {
+            background-color: #ffeeba;
+            border-color: #ffc107;
+            color: #856404;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+{% block start %}
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+            <img src="https://img.studyclap.com/img/institute/logo/c26fb2db83-jscoe-pune.jpg" alt="Logo">
+            <span class="d-none d-lg-inline">JSPM's Jaywantrao Sawant Insti Of Engi, Pune</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link active" href="/student_dash/">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="/student_profile/">Profile</a></li>
+                <li class="nav-item"><a class="nav-link" href="/userlogout/">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Student Notes View -->
+<div class="content-section mt-4">
+    <h3 class="hny-title">Notes</h3>
+
+    <!-- Access Information Alert -->
+    <div class="alert-access">
+        <strong>Note:</strong> As a Year {{ student_year }} student, you can only access notes for Year {{ student_year }} and below.
+    </div>
+
+    <!-- Filters Section -->
+    <div class="filters-section">
+        <form method="GET" class="row g-3">
+            <div class="col-md-3">
+                <label for="yearFilter" class="form-label">Year</label>
+                <select class="form-select" id="yearFilter" name="year">
+                    <option value="">All Available Years</option>
+                    {% for year in available_years %}
+                        <option value="{{ year }}" {% if current_year_filter == year %}selected{% endif %}>Year {{ year }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="semesterFilter" class="form-label">Semester</label>
+                <select class="form-select" id="semesterFilter" name="semester" >
+                    <option value="">All Semesters</option>
+                    {% for semester in available_semesters %}
+                        <option value="{{ semester }}" {% if current_semester_filter == semester %}selected{% endif %}>{{ semester }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-3 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary me-2">Filter</button>
+                <a href="{% url 'student_notes_view' %}" class="btn btn-secondary">Reset</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Sr. No</th>
+                    <th>Year</th>
+                    <th>Semester</th>
+                    <th>Subject</th>
+                    <th>Unit</th>
+                    <th>View Notes</th>
+                    <th>Date Uploaded</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if notes %}
+                    {% for note in notes %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ note.year }} Yr</td>
+                        <td>{{ note.semester }}</td>
+                        <td>{{ note.subject.name }}</td>
+                        <td>{{ note.unit }}</td>
+                        <td>
+                            <a href="{{ note.file.url }}" target="_blank" class="note-link">
+                               {{ note.file.name }}
+                            </a>
+                        </td>
+                        <td>{{ note.date }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center">No notes available based on the selected filters.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+        {% if message %}
+            <div class="alert alert-info mt-3">{{ message }}</div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

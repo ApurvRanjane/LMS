@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Teacher Notes Upload</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url("https://smartcampuses.com/wp-content/uploads/revslider/web-agency-home-content/Slide-2-Background.jpg");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding-top: 90px;
+        }
+
+        .form-section {
+            background-color: #e6f0ff;
+            margin: 0 auto;
+            padding: 30px 40px;
+            border-radius: 10px;
+            max-width: 800px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        select, input[type="date"], input[type="file"], textarea, input[type="submit"], input[type="reset"] {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        input[type="submit"], input[type="reset"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            transition: 0.3s;
+        }
+
+        input[type="submit"]:hover, input[type="reset"]:hover {
+            background-color: #0056b3;
+        }
+
+        input[type="file"]::file-selector-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background-color: rgb(65, 103, 153);
+        }
+        .nav-link {
+    font-weight: bold !important;
+}
+    </style>
+</head>
+<body>
+{% block start %}
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+            <img src="https://img.studyclap.com/img/institute/logo/c26fb2db83-jscoe-pune.jpg" alt="Logo" style="height: 40px; margin-right: 10px;">
+            <span class="d-none d-lg-inline">JSPM's Jaywantrao Sawant Insti Of Engi, Pune</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link active" href="/teacher_dash/">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Courses</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Settings</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/login/">Logout</a></li>
+                </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Form Section -->
+<div class="form-section">
+    <h2>Upload Notes</h2>
+    <form id="uploadForm" method="post" enctype="multipart/form-data">
+          {%csrf_token%}
+        <label for="year">Select Branch:</label>
+        <select id="branch" name="branch">
+            <option value="">--Select Branch--</option>
+           {% for b in T_B %}
+                    <option value="{{ b.id }}">{{ b.branch }}</option>
+            {% endfor %}
+           
+        </select>
+        <label for="year">Select Year:</label>
+        <select id="year" name="year">
+            <option value="">--Select Year--</option>
+            <option value="1">First Year</option>
+            <option value="2">Second Year</option>
+            <option value="3">Third Year</option>
+            <option value="4">Fourth Year</option>
+        </select>
+
+        <label for="semester">Select Semester:</label>
+        <select id="semester" name="semester">
+            <option value="">--Select Semester--</option>
+        </select>
+
+        <label for="subject">Select Subject:</label>
+        <select id="subject" name="subject">
+            <option value="">--Select Subject--</option>
+        </select>
+
+        <label for="unit_point">Unit Name:</label>
+        <input type="text" class="form-control" id="unit" name="unit" placeholder="Enter unit no & name"/>
+    
+        <label for="unit_point">Subpoint Name:</label>
+        <input  type="text" class="form-control" id="subpoint" name="subpoint" placeholder="Enter subpoint no & name"/>
+
+        <label for="date">Date of Upload:</label>
+        <input type="date" id="date" name="date">
+
+        <label for="notesFile">Upload Notes:</label>
+        <input type="file" id="notesFile" name="File" accept=".pdf,.doc,.docx,.ppt,.pptx">
+
+        <input type="submit" id="submitBtn" value="Upload Notes">
+    </form>
+    <div class="form-input">
+                   <label class="text-success">{{message}}</label>
+               </div>
+</div>
+{% endblock %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+const semesterMap = {
+  1: ['1', '2'],
+  2: ['3', '4'],
+  3: ['5', '6'],
+  4: ['7', '8']
+};
+
+document.getElementById("year").addEventListener("change", function () {
+  const year = this.value;
+  const semSelect = document.getElementById("semester");
+  semSelect.innerHTML = `<option value="">Select Semester</option>`;
+  semesterMap[year]?.forEach(s => {
+    semSelect.innerHTML += `<option value="${s}">Semester ${s}</option>`;
+  });
+});
+
+// Fetch subjects based on branch, year, semester
+$('#semester').change(function () {
+  let branch = $('#branch').val();
+  let year = $('#year').val();
+  let semester = $(this).val();
+
+  if (branch && year && semester) {
+    $.ajax({
+      url: "{% url 'get_subjects' %}",
+      type: "GET",
+      data: {
+        'branch': branch,
+        'year': year,
+        'semester': semester
+      },
+      success: function (response) {
+        let subjectDropdown = $('#subject');
+        subjectDropdown.empty().append('<option value="">--Select Subject--</option>');
+        $.each(response, function (index, subject) {
+          subjectDropdown.append(`<option value="${subject.id}">${subject.name}</option>`);
+        });
+      },
+      error: function (xhr, status, error) {
+        console.error("AJAX Error: ", error);
+      }
+    });
+  }
+});
+</script>
+
+
+</body>
+</html>

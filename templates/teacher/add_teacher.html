@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Teacher Registration</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-image: url("https://smartcampuses.com/wp-content/uploads/revslider/web-agency-home-content/Slide-2-Background.jpg");
+      background-size: cover;
+      background-attachment: fixed;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 50px auto;
+      background-color: rgba(255, 255, 255, 0.97);
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.15);
+    }
+
+    .form-title {
+      font-weight: 600;
+      font-size: 28px;
+      color: #333;
+    }
+
+    .table-container {
+      max-width: 900px;
+      margin: 30px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      font-weight: 500;
+    }
+
+    .btn-primary {
+      font-size: 16px;
+      padding: 10px 0;
+    }
+  </style>
+</head>
+<body>
+{% block start %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <a class="navbar-brand ms-3" href="#">LMS Portal</a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link active" href="/admin_dash/">Dashboard</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">User Management</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Settings</a></li>
+      <li class="nav-item"><a class="nav-link" href="/userlogout/">Logout</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container">
+  <h2 class="text-center mb-4 form-title">Teacher Registration Form</h2>
+  <form id="teacherForm" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="name" class="form-label">Full Name</label>
+        <input type="text" class="form-control" name="name" required />
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="mobile" class="form-label">Phone Number</label>
+        <input type="number" class="form-control" name="mobile" required />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="email" class="form-label">Email Address</label>
+        <input type="email" class="form-control" name="email" required />
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="qualification" class="form-label">Qualification</label>
+        <input type="text" class="form-control" name="qualification" required />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="experience" class="form-label">Years of Experience</label>
+        <input type="number" class="form-control" name="experience" required />
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="image" class="form-label">Image</label>
+        <input type="file" class="form-control" name="image" accept="image/jpeg"  />
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="address" class="form-label">Address</label>
+      <textarea class="form-control" name="address" rows="3" required></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="post" class="form-label">Post</label>
+      <select class="form-select" name="post">
+        <option value="">Select Post</option>
+        <option>Head Professor</option>
+        <option>Assistant Professor</option>
+        <option>Class Co-Ordinator</option>
+      </select>
+    </div>
+
+                  
+  
+    <div class="col-md-4 mb-3">
+        <label for="branchSelect" class="form-label">Select Branch</label>
+        <select class="form-select" name="branch" id="branch">
+          <option selected disabled>-- Select a Branch --</option>
+          {% for branch in branches %}
+            <option value="{{ branch.id }}">{{ branch.branch }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      
+    <div class="row">
+
+        <div class="col-md-6 mb-3">
+          <label for="division" class="form-label">Division <small class="text-muted">(Type in capital)</small></label>
+          <input type="text" class="form-control" name="division" placeholder="e.g A,B.." style="text-transform: uppercase;">
+        </div>
+
+          <div class="col-md-4 mb-3">
+        <label for="subjectSelect" class="form-label">Select Subject</label>
+        <select name="subject" id="subject" multiple class="form-select">
+    {% for subject in subjects %}
+        <option value="{{ subject.id }}">{{ subject.name }}</option>
+    {% endfor %}
+</select>
+      </div>
+
+  
+    <div class="text-center">
+      <button type="submit" class="btn btn-primary w-100">Register</button>
+    </div>
+    
+    {% if message %}
+    <p class="text-success text-center mt-3">{{ message }}</p>
+    {% endif %}
+  </form>
+</div>
+
+
+{% endblock %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Teacher-Master</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+
+  <style>
+    body {
+      background-image: url("https://smartcampuses.com/wp-content/uploads/revslider/web-agency-home-content/Slide-2-Background.jpg"); 
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    .full-width-section {
+      padding: 20px;
+      width: 100%;
+    }
+
+    table {
+      width: 100% !important;
+    }
+
+    .custom-navbar {
+      background-color: #03415b;
+      padding: 4px 10px;
+      font-size: 0.9rem;
+      min-height: 50px;
+    }
+
+    .custom-navbar .navbar-brand {
+      font-size: 1.1rem;
+      padding: 2px 0;
+    }
+
+    .small-nav .nav-link {
+      color: #fff;
+      padding: 4px 10px;
+      margin: 0 3px;
+      transition: 0.2s ease-in-out;
+    }
+
+    .small-nav .nav-link:hover,
+    .small-nav .nav-link.active {
+      background-color: rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+    }
+
+    .logout-link:hover {
+      background-color: rgba(255, 0, 0, 0.2);
+    }
+
+    label {
+      color: white;
+      font-size: 1.1rem;
+    }
+
+    .form-control::placeholder {
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+
+<body>
+{% block start %}
+  <nav class="navbar navbar-expand-lg custom-navbar">
+    <div class="container-fluid px-3">
+      <a class="navbar-brand fw-bold text-white" href="#">LMS Portal</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto small-nav">
+          <li class="nav-item"><a class="nav-link" href="/admin_dash/">Dashboard</a></li>
+          
+          <li class="nav-item"><a class="nav-link" href="#">Settings</a></li>
+          <li class="nav-item"><a class="nav-link logout-link" href="/login/">Logout</a></li>
+        </ul>
+       
+        <form class="d-flex" role="search">
+          <input class="form-control form-control-sm me-2" type="search" placeholder="Search college..." aria-label="Search" />
+          <button class="btn btn-outline-light btn-sm" type="submit">Search</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <section class="full-width-section">
+    
+    <div class="title-content text-center mb-4 mt-2">
+      <h2 class="hny-title text-white" id="h3">Teacher Master</h2>
+    </div>
+
+    <div class="text-center mb-4">
+      <label class="text-white">Welcome to Teacher Master</label>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered table-hover w-100">
+        <thead class="table-dark">
+
+          <tr>
+            <th>Sr.NO</th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Mobile</th>
+            <th>Qualification </th>
+            <th>Experience</th>
+            <th>Post</th>
+            <th>Branche</th>
+            <th>Subject</th>
+            <th>Address</th>
+            <th>Image</th>
+                  
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+                            {% for teacher in teachers %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ teacher.id }}</td>
+                                <td>{{ teacher.name }}</td>
+                                <td>{{ teacher.email }}</td>
+                                <td>{{ teacher.mobile }}</td>
+                                <td>{{ teacher.qualification }}</td>
+                                <td>{{ teacher.experience }}</td>
+                                <td>{{ teacher.post }}</td>
+                                
+                                      <td>                
+                            {% for branch in teacher.branch.all %}
+                              {{ forloop.counter }}. {{ branch.branch }}<br>
+                            {% endfor %}
+                          </td>
+
+                                          <td>                
+                            {% for subject in teacher.subject.all %}
+                              {{ forloop.counter }}. {{ subject.name }}<br>
+                            {% endfor %}
+                          </td>
+                                <td>{{ teacher.address }}</td>
+                                
+                             <td><img src="{{teacher.image.url}}" class="card-img-top" style="height:100px;width:100px" alt="not found"></td>
+
+                               
+
+<td>
+  <form method="post" style="display:inline;">
+    {% csrf_token %}
+    <input type="hidden" name="id" value="{{ teacher.id }}">
+
+    <!-- Delete Button -->
+    <button type="submit" name="action" value="Delete" class="btn btn-danger btn-sm me-1"
+            onclick="return confirm('Are you sure you want to delete this teacher?');">
+      <i class="bi bi-trash"></i> Delete
+    </button>
+
+    <!-- Update Button -->
+    <button type="submit" name="action" value="Update" class="btn btn-primary btn-sm">
+      <i class="bi bi-pencil"></i> Update
+    </button>
+  </form>
+</td>
+
+                              </tr>
+
+                            {% endfor %}
+                            </tbody>
+      </table>
+    </div>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+{% endblock %}
+</html>

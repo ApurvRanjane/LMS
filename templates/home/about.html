@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About LMS - JSPM's JSCOE</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url("https://smartcampuses.com/wp-content/uploads/revslider/web-agency-home-content/Slide-2-Background.jpg");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .hero {
+            color: white;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-align: center;
+        }
+        .content-section {
+            text-align: center;
+            margin: 30px 0;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+        }
+        .content-section h2 {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .content-section p, .content-section ul {
+            font-size: 1.1rem;
+        }
+        .navbar {
+            background-color: white !important;
+            border-bottom: none;
+        }
+        .navbar-brand, .navbar-nav .nav-link {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: black !important;
+        }
+        .navbar-nav .nav-link:hover {
+            color: gray !important;
+        }
+        .footer {
+            background-color: white;
+            color: black;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: auto;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="https://img.studyclap.com/img/institute/logo/c26fb2db83-jscoe-pune.jpg" alt="College Logo" width="50" height="50" class="me-2">
+                JSPM's JSCOE LMS
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact/">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/login/">Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">Welcome to JSPM's JSCOE LMS</div>
+
+    <div class="container">
+        <section id="vision" class="content-section">
+            <h2>Our Vision</h2>
+            <p>To be a premier institute developing technically competent professionals to serve the industry and society.</p>
+        </section>
+
+        <section id="mission" class="content-section">
+            <h2>Our Mission</h2>
+            <ul class="list-unstyled">
+                <li>➤ To provide quality education through innovative teaching methods.</li>
+                <li>➤ To enhance industry-institute interaction and encourage research.</li>
+                <li>➤ To develop ethical and socially responsible engineers.</li>
+            </ul>
+        </section>
+
+        <section id="academics" class="content-section">
+            <h2>Academics</h2>
+            <p>We offer a diverse range of programs designed to equip students with the necessary skills to excel in their careers.</p>
+        </section>
+    </div>
+
+    <footer class="footer">
+        &copy; 2025 JSPM's JSCOE | All Rights Reserved
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Teacher Notes Master</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url("https://smartcampuses.com/wp-content/uploads/revslider/web-agency-home-content/Slide-2-Background.jpg");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding-top: 90px;
+        }
+
+        .content-section {
+            background-color: #e6f0ff;
+            margin: 0 auto;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 95%;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        h3.hny-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .text-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .table {
+            border: 2px solid black;
+        }
+
+        .table th,
+        .table td {
+            border: 1px solid black !important;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .table thead th {
+            background-color: #343a40;
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 4px 10px;
+            font-size: 14px;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .nav-link {
+            font-weight: bold !important;
+        }
+
+        .note-link {
+            color: blue;
+            text-decoration: underline;
+            font-weight: 500;
+        }
+
+        .note-link:hover {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+{% block start %}
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+            <img src="https://img.studyclap.com/img/institute/logo/c26fb2db83-jscoe-pune.jpg" alt="Logo">
+            <span class="d-none d-lg-inline">JSPM's Jaywantrao Sawant Insti Of Engi, Pune</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+             <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="/teacher_dash/">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">User Management</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Settings</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/userlogout/">Logout</a></li>
+                </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Teacher Notes Master Table -->
+<div class="content-section mt-4">
+    <h3 class="hny-title">Notes Master</h3>
+    <p class="text-info">View and manage uploaded notes below.</p>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Sr. No</th>
+                    <th>Id</th>
+                    <th>Year</th>
+                    <th>Semester</th>
+                    <th>Subject</th>
+                    <th>Unit</th>
+                    <th>View Notes</th>
+                    <th>Date Uploaded</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                    {% for note in notes %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{note.id}}</td>
+                    <td>{{note.year}}</td>
+                    <td>{{note.semester}}</td>
+                    <td>{{note.subject.name}}</td>
+                    <td>{{note.unit}}</td>
+                    <td>
+                        <a href="{{note.file.url}}" target="_blank" class="note-link">
+                           {{note.file.name}}
+                        </a>
+                    </td>
+                    <td>{{note.date}}</td>
+                    <td>
+                     <form method="post">
+                                        {%csrf_token%}
+                                        <input type="hidden" name="id" value="{{ note.id }}" required>
+<!--                                           <input type="submit" name="action" value="Update" class="btn btn-primary">-->
+                         <input type="submit" name="action" value="Delete" class="btn btn-danger">
+                                    </form>
+                    </td>
+                </tr>
+                   {% endfor %}
+            </tbody>
+        </table>
+        <label class="text-info">{{message}}</label>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+{% endblock %}
+</html>

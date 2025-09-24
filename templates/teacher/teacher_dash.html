@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard</title>
+    <!-- Bootstrap and Font Awesome CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url("https://smartcampuses.com/wp-content/uploads/revslider/web-agency-home-content/Slide-2-Background.jpg");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #fff;
+        }
+
+        .header {
+            text-align: center;
+            padding-top: 50px;
+            padding-bottom: 40px;
+        }
+
+        .header img {
+            max-width: 150px;
+            margin-bottom: 15px;
+        }
+
+        .header h2 {
+            font-size: 36px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: black;
+        }
+
+        .navbar {
+            background-color: rgb(192, 233, 230);
+            padding: 10px 20px;
+        }
+
+        .navbar a {
+            color: black;
+            font-weight: bold;
+            padding: 12px 20px;
+            text-decoration: none;
+        }
+
+        .navbar a:hover {
+            background-color: #94a3b4;
+            border-radius: 5px;
+        }
+
+        .navbar .navbar-brand {
+            font-weight: bold;
+        }
+
+        .search-bar {
+            width: 250px;
+            border-radius: 20px;
+            padding: 5px 10px;
+            border: 1px solid gray;
+            outline: none;
+        }
+
+        .btn-logout {
+            background-color: rgb(87, 173, 216);
+            color: white;
+            border-radius: 20px;
+            padding: 6px 15px;
+            font-weight: bold;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background-color: darkred;
+        }
+
+        .option {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            margin: 15px 0;
+            backdrop-filter: blur(10px);
+            height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .option:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .option i {
+            font-size: 55px;
+            color: rgb(72, 38, 104);
+            margin-bottom: 20px;
+            transition: color 0.3s ease;
+        }
+
+        .option:hover i {
+            color: rgb(35, 17, 52);
+        }
+
+        .option h4 {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            transition: color 0.3s ease;
+        }
+
+        .option:hover h4 {
+            color: #0a1f36;
+        }
+
+        .btn-custom {
+            background-color: lightseagreen;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 12px 30px;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            background-color: #218688;
+        }
+
+        .btn-custom:active {
+            background-color: #15d1e2;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .col-md-3 {
+            display: flex;
+            flex: 1;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <a class="navbar-brand" href="#">
+  {% if teacher.post == "HOD" %}
+    HOD Dashboard
+  {% elif teacher.post == "Head Professor" %}
+    Head Professor Dashboard
+  {% elif teacher.post == "Assistant Professor" %}
+    Assistant Professor Dashboard
+  {% elif teacher.post == "Class Co-Ordinator" %}
+    Class Co-Ordinator Dashboard
+  {% else %}
+    Teacher Dashboard
+  {% endif %}
+</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+               
+                <li class="nav-item ml-3">
+                    <span class="image"><img 
+                    src="{% if teacher.image %}{{ teacher.image.url }}{% else %}/static/images/default.jpg{% endif %}" 
+                    class="card-img-top profile-pic" 
+                    style=" border-radius: 50%; height:40px;width:40px"
+                    alt="Student Profile">  
+                    <span class="username">Welcome,{{ teacher.name}}</span>
+
+        <a href="/userlogout/" class="btn btn-logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container" style="margin-top: 80px;">
+            <div class="header">
+                <img src="https://www.pngmart.com/files/23/Teacher-PNG.png">
+                                {% if teacher.post == "HOD" %}
+                <h2>Welcome to Your HOD Dashboard</h2>
+                {% elif teacher.post == "Head Professor" %}
+                    <h2>Welcome to Your Head Professor Dashboard</h2>
+                {% elif teacher.post == "Assistant Professor" %}
+                <h2>Welcome to Your Assistant Professor Dashboard</h2>
+                {% elif teacher.post == "Class Co-Ordinator" %}
+                <h2>Welcome to Your Class Co-Ordinator Dashboard</h2>
+                {% else %}
+                    <h2>Welcome to Your Teacher Dashboard</h2>
+                {% endif %}
+                
+            </div>
+
+        <div class="row text-center">
+            
+            <div class="col-md-3 col-sm-6">
+                <div class="option">
+                    <i class="fas fa-user-edit"></i>
+                    <h4>Update Profile</h4>
+                    <a href="\teacher_profile\" class="btn btn-custom">Edit Profile</a>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                <div class="option">
+                    <i class="fas fa-book"></i>
+                    <h4>Upload Notes</h4>
+                    <a href="\add_notes\" class="btn btn-custom">Upload Notes</a>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                <div class="option">
+                    <i class="fas fa-file-alt"></i>
+                    <h4>Notes Matser</h4>
+                    <a href="\teacher_note_master\" class="btn btn-custom">View NOtes</a>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                <div class="option">
+                    <i class="fas fa-user-plus"></i>
+                    <h4>Student Master</h4>
+                    <a href="/student_master_cc/" class="btn btn-custom">Show </a>
+                </div>
+            </div>
+        </div>
+    <div class="row text-center gx-1">
+            {% if teacher.post == "HOD" or teacher.post == "Head Professor" %}
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="option">
+                        <i class="fas fa-user-plus"></i>
+                        <h4>Add Student</h4>
+                        <a href="/add_student/" class="btn btn-custom">Add </a>
+                    </div>
+                </div> 
+                            
+                <div class="col-md-3 col-sm-6">
+                    <div class="option">
+                        <i class="fas fa-book"></i>
+                        <h4>Add Teacher</h4>
+                        <a href="/add_teacher/" class="btn btn-custom">Add Teacher</a>
+                    </div>
+                </div>
+
+               <div class="col-md-3 col-sm-2">
+                <div class="option">
+                    <i class="fas fa-user-times"></i>
+                    <h4>Teacher Master</h4>
+                    <a href="/teacher_master/" class="btn btn-custom">Show</a>
+                </div>
+            </div>
+        
+                {% endif %}
+
+        </div>
+    </div>
+    
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

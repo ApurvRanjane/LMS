@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LMS Video Page</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f5f7fa;
+    }
+
+    .sidebar {
+      height: calc(100vh - 56px);
+      overflow-y: auto;
+      padding: 1rem;
+      border: 1px solid #ddd;
+      background-color: #ffffff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    .video-tile {
+      position: relative;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      width: 800px;
+      margin: 0 auto;
+    }
+
+    .video-tile:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .video-thumbnail {
+      width: 100%;
+      height: 450px;
+      background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .play-button {
+      width: 80px;
+      height: 80px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .play-button:hover {
+      background: white;
+      transform: scale(1.1);
+    }
+
+    .play-icon {
+      width: 0;
+      height: 0;
+      border-left: 20px solid #333;
+      border-top: 13px solid transparent;
+      border-bottom: 13px solid transparent;
+      margin-left: 4px;
+    }
+
+    .video-info {
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+    }
+
+    .duration-badge {
+      background: #333;
+      color: white;
+      padding: 6px 10px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      position: absolute;
+      bottom: 15px;
+      right: 15px;
+    }
+
+    .video-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-top: 1rem;
+      text-align: center;
+    }
+
+    .video-description {
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+
+    .video-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: #888;
+      margin-top: 15px;
+    }
+
+    .view-count {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .app-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin-bottom: 1rem;
+      white-space: pre-line;
+      line-height: 1.6;
+    }
+
+    .ai-content {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .ai-content h3 {
+      color: #2c3e50;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 1rem 0 0.5rem 0;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 0.3rem;
+    }
+
+    .ai-content ul {
+      margin: 0.5rem 0;
+      padding-left: 1.2rem;
+    }
+
+    .ai-content li {
+      margin-bottom: 0.3rem;
+      color: #34495e;
+      font-size: 0.9rem;
+    }
+
+    .ai-content strong {
+      color: #2980b9;
+      font-weight: 600;
+    }
+
+    .sidebar h5 {
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .tree-item {
+      cursor: pointer;
+      margin-left: 10px;
+      margin-bottom: 4px;
+    }
+
+    .tree-item:hover {
+      text-decoration: underline;
+      color: #0d6efd;
+    }
+
+    .custom-container {
+      padding: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .col-md-2.sidebar {
+        flex: 0 0 20%;
+        max-width: 20%;
+      }
+
+      .col-md-3.sidebar {
+        flex: 0 0 25%;
+        max-width: 25%;
+      }
+
+      .col-md-7 {
+        flex: 0 0 55%;
+        max-width: 55%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">College LMS</a>
+  </div>
+</nav>
+
+<!-- Page Content -->
+<div class="container-fluid custom-container">
+  <div class="row">
+
+    <!-- Left Sidebar: Video Topics Tree -->
+    <div class="col-md-2 sidebar">
+      <h5>Video Topics</h5>
+      <div id="videoTree"></div>
+    </div>
+
+    <!-- Center: Video Player -->
+    <div class="col-md-7 p-3 d-flex flex-column align-items-center">
+      <div class="video-tile mb-3">
+        <div class="video-thumbnail">
+          <div class="play-button" onclick="playMainVideo()">
+            <div class="play-icon"></div>
+          </div>
+          <div class="duration-badge" id="videoDuration">12:34</div>
+          <video id="mainVideo" width="100%" height="100%" controls style="display: none;">
+            <source id="videoSource" src="" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+
+        <div class="video-info">
+          <div class="w-100">
+            <label for="videoTitle" class="form-label fw-bold">Title</label>
+            <div id="videoTitle" class="video-title text-start mb-3"></div>
+
+            <label for="videoDescription" class="form-label fw-bold">Description</label>
+            <div id="videoDescription" class="video-description text-start"></div>
+
+            <div class="video-meta">
+              <div class="view-count">
+
+              </div>
+              <div class="upload-date" id="uploadDate">
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Sidebar: Applications -->
+    <div class="col-md-3 sidebar">
+      <h5>AI Applications</h5>
+      <div id="applicationList">
+        <div class="app-card ai-content" id="aiContent">
+          {{ ai_reply|linebreaks }}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Bootstrap + JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Videos JSON -->
+<script>
+  const videos = {{videos_json|safe}};
+</script>
+
+<!-- Render Tree & Load Video -->
+<script>
+function buildVideoTree() {
+  const container = document.getElementById('videoTree');
+  const structure = {};
+
+  // Group videos by subject > unit > subpoint
+  videos.forEach((video, index) => {
+    const { subject, unit, subpoint } = video;
+
+    if (!structure[subject]) structure[subject] = {};
+    if (!structure[subject][unit]) structure[subject][unit] = [];
+    structure[subject][unit].push({ subpoint, index });
+  });
+
+  // Render the tree structure
+  Object.keys(structure).forEach(subject => {
+    const subjectElem = document.createElement('div');
+    subjectElem.innerHTML = `<strong>${subject}</strong>`;
+
+    Object.keys(structure[subject]).forEach(unit => {
+      const unitElem = document.createElement('div');
+      unitElem.className = 'ms-2';
+      unitElem.innerHTML = `<em>${unit}</em>`;
+
+      structure[subject][unit].forEach(({ subpoint, index }) => {
+        const subpointElem = document.createElement('div');
+        subpointElem.className = 'tree-item ms-4';
+        subpointElem.innerText = subpoint;
+        subpointElem.onclick = () => loadVideo(index);
+        unitElem.appendChild(subpointElem);
+      });
+
+      subjectElem.appendChild(unitElem);
+    });
+
+    container.appendChild(subjectElem);
+  });
+
+  // Format AI content on page load
+  formatAIContent();
+}
+
+function formatAIContent() {
+  const aiContent = document.getElementById('aiContent');
+  if (aiContent) {
+    let content = aiContent.innerHTML;
+
+    // Convert **TEXT** to headings
+    content = content.replace(/\*\*(.*?)\*\*/g, '<h3>$1</h3>');
+
+    // Convert bullet points to proper lists
+    content = content.replace(/•\s*(.*?)(?=<br>|$)/g, '<li>$1</li>');
+
+    // Wrap consecutive <li> elements in <ul>
+    content = content.replace(/(<li>.*?<\/li>)(\s*<br>\s*<li>.*?<\/li>)*/g, function(match) {
+      return '<ul>' + match.replace(/<br>\s*/g, '') + '</ul>';
+    });
+
+    // Clean up extra <br> tags
+    content = content.replace(/<br>\s*<br>/g, '<br>');
+
+    aiContent.innerHTML = content;
+  }
+}
+
+function loadVideo(index) {
+  const video = videos[index];
+  document.getElementById('videoSource').src = video.src;
+
+  document.getElementById('videoTitle').innerText = video.title;
+  document.getElementById('videoDescription').innerText = video.description;
+
+  // Reset to thumbnail view
+  document.getElementById('mainVideo').style.display = 'none';
+  document.querySelector('.play-button').style.display = 'flex';
+  document.querySelector('.duration-badge').style.display = 'block';
+
+  // Update AI applications with video-specific info
+  const appList = document.getElementById('applicationList');
+  appList.innerHTML = '';
+
+  // Add AI content
+  const aiCard = document.createElement('div');
+  aiCard.className = 'app-card ai-content';
+  aiCard.innerHTML = `{{ ai_reply|linebreaks }}`;
+
+  // Format the AI content
+  let content = aiCard.innerHTML;
+  content = content.replace(/\*\*(.*?)\*\*/g, '<h3>$1</h3>');
+  content = content.replace(/•\s*(.*?)(?=<br>|$)/g, '<li>$1</li>');
+  content = content.replace(/(<li>.*?<\/li>)(\s*<br>\s*<li>.*?<\/li>)*/g, function(match) {
+    return '<ul>' + match.replace(/<br>\s*/g, '') + '</ul>';
+  });
+  aiCard.innerHTML = content;
+
+  appList.appendChild(aiCard);
+
+  // Add video-specific apps
+<!--  video.apps.forEach(app => {-->
+<!--    const card = document.createElement('div');-->
+<!--    card.className = 'app-card';-->
+<!--    card.innerText = app.trim();-->
+<!--    appList.appendChild(card);-->
+<!--  });-->
+}
+
+function playMainVideo() {
+  const videoElement = document.getElementById('mainVideo');
+  const playButton = document.querySelector('.play-button');
+  const durationBadge = document.querySelector('.duration-badge');
+
+  // Hide play button and duration badge
+  playButton.style.display = 'none';
+  durationBadge.style.display = 'none';
+
+  // Show and play video
+  videoElement.style.display = 'block';
+  videoElement.load();
+  videoElement.play();
+}
+
+buildVideoTree();
+</script>
+
+</body>
+</html>
